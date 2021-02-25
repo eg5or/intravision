@@ -1,25 +1,50 @@
-import logo from './logo.svg';
+import React, {useState} from 'react'
 import './App.css';
+import Header from './components/Header/Header';
+import Menu from './components/Menu/Menu';
+import RequestsList from './components/Requests/RequestsList';
+import {Switch, Route} from 'react-router-dom';
+import SidePanel from './components/Requests/SidePanel/SidePanel';
+import KnowledgeBase from './components/OtherPages/KnowledgeBase';
+import Assets from './components/OtherPages/Assets';
+import Clients from './components/OtherPages/Clients';
+import Employees from './components/OtherPages/Employees';
+import Settings from './components/OtherPages/Settings';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+function App(props) {
+    const [openSidePanel, setOpenSidePanel] = useState(false)
+
+    const onOpenSidePanel = () => {
+        setOpenSidePanel(true)
+    }
+    const onCloseSidePanel = () => {
+        setOpenSidePanel(false)
+    }
+
+    return (
+        <div className="app-wrapper">
+            <Menu onCloseSidePanel={onCloseSidePanel}/>
+            <div className="right-wrapper">
+                <Header/>
+                <div className="content-wrapper">
+                    <Switch>
+                        <Route path='/knowledgebase' component={KnowledgeBase}/>
+                        <Route path='/assets' component={Assets}/>
+                        <Route path='/clients' component={Clients}/>
+                        <Route path='/employees' component={Employees}/>
+                        <Route path='/settings' component={Settings}/>
+                        <Route path='/requests' component={() => {
+                            return <RequestsList onOpenSidePanel={onOpenSidePanel}/>
+                        }}/>
+                    </Switch>
+                </div>
+            </div>
+            <div className="side-panel-wrapper" style={{right: openSidePanel ? 0 : '-50%'}}>
+                <SidePanel onCloseSidePanel={onCloseSidePanel}/>
+            </div>
+        </div>
+    );
 }
 
-export default App;
+export default App
