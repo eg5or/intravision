@@ -3,28 +3,32 @@ import {Route, Switch} from 'react-router-dom';
 import AddTask from '../AddTask/AddTask';
 import ShowTask from '../ShowTask/ShowTask';
 import EditTask from '../EditTask/EditTask';
-import {compose} from 'redux';
-import {connect} from 'react-redux';
 
-const SidePanel = (props) => {
+const SidePanel = ({
+    onCloseSidePanel,
+    tasks,
+    updateTask,
+    statuses
+}) => {
+
     return <>
         <Switch>
-            <Route path='/requests/add' component={() => <AddTask/>}/>
-            <Route path='/requests/:taskId' component={(obj) => <ShowTask match={obj.match}
-                                                                          tasks={props.tasks}
-                                                                          onCloseSidePanel={props.onCloseSidePanel}
+            <Route path='/requests/add' component={() => <AddTask onCloseSidePanel={onCloseSidePanel}
+
             />}/>
+            <Route path='/requests/:taskId' component={(obj) => {
+                const currentTask = tasks.filter(item => item.id === +obj.match.params.taskId)[0]
+                return <ShowTask
+                          task={currentTask}
+                          onCloseSidePanel={onCloseSidePanel}
+                          updateTask={updateTask}
+                          statuses={statuses}
+                />
+            }
+            }/>
             <Route path='/requests/edit/:taskId' component={() => <EditTask/>}/>
         </Switch>
     </>
 }
 
-const mapStateToProps = (state) => ({
-    tasks: state.tasks.tasksData
-})
-
-export default compose(
-    connect(mapStateToProps, {
-
-    })
-)(SidePanel)
+export default SidePanel

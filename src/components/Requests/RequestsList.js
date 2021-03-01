@@ -1,24 +1,23 @@
 import React, {useEffect} from 'react'
 import Request from './Request/Request';
-import {compose} from 'redux';
-import {connect} from 'react-redux';
-import {loadingTasksPage} from '../../redux/tasksReducer';
 import {Link} from 'react-router-dom';
 
-const RequestsList = (props) => {
-    useEffect(() => {
-        props.loadingTasksPage()
-    }, [])
+const RequestsList = ({
+    onOpenSidePanel,
+    tasks,
+    priorities
+                      }) => {
 
-    const tasksElements = props.tasks.map(item => <Request key={item.id}
-                                                           onOpenSidePanel={props.onOpenSidePanel}
-                                                           task={item}
-                                                           priorities={props.priorities}
+
+    const tasksElements = tasks.map(item => <Request key={item.id}
+                                                     onOpenSidePanel={onOpenSidePanel}
+                                                     task={item}
+                                                     priorities={priorities}
     />)
 
     return <div className="requests-wrapper">
         <div className="requests-top-header">
-            <Link to={'/requests/add'} className="create-request-btn" onClick={props.onOpenSidePanel}>
+            <Link to={'/requests/add'} className="create-request-btn btn-primary" onClick={onOpenSidePanel}>
                 Создать заявку
             </Link>
         </div>
@@ -37,15 +36,4 @@ const RequestsList = (props) => {
     </div>
 }
 
-const mapStateToProps = (state) => ({
-    priorities: state.tasks.priorities,
-    statuses: state.tasks.statuses,
-    tags: state.tasks.tags,
-    tasks: state.tasks.tasksData
-})
-
-export default compose(
-    connect(mapStateToProps, {
-        loadingTasksPage
-    })
-)(RequestsList)
+export default RequestsList

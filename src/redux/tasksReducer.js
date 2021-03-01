@@ -6,6 +6,7 @@ const SET_TASKS_DATA = 'intravision/tasks/SET_TASKS_DATA'
 const SET_PRIORITIES_DATA = 'intravision/tasks/SET_PRIORITIES_DATA'
 const SET_STATUSES_DATA = 'intravision/tasks/SET_STATUSES_DATA'
 const SET_TAGS_DATA = 'intravision/tasks/SET_TAGS_DATA'
+const SET_USERS_DATA = 'intravision/tasks/SET_USERS_DATA'
 
 // state
 let initialState = {
@@ -13,6 +14,7 @@ let initialState = {
     priorities: [],
     statuses: [],
     tags: [],
+    users: [],
 }
 
 // cases
@@ -38,6 +40,11 @@ const appReducer = (state = initialState, action) => {
                 ...state,
                 tags: action.data
             }
+        case SET_USERS_DATA:
+            return {
+                ...state,
+                users: action.data
+            }
         default:
             return state
     }
@@ -48,6 +55,7 @@ export const setTasksData = (data) => ({type: SET_TASKS_DATA, data})
 export const setPrioritiesData = (data) => ({type: SET_PRIORITIES_DATA, data})
 export const setStatusesData = (data) => ({type: SET_STATUSES_DATA, data})
 export const setTagsData = (data) => ({type: SET_TAGS_DATA, data})
+export const setUsersData = (data) => ({type: SET_USERS_DATA, data})
 
 // thunks
 export const getTasksData = () => async (dispatch) => {
@@ -81,6 +89,55 @@ export const getTags = () => async (dispatch) => {
     try {
         const data = await tasksAPI.getTags()
         dispatch(setTagsData(data.data))
+    } catch (e) {
+        console.log('Ошибка ', e)
+    }
+}
+
+export const getUsers = () => async (dispatch) => {
+    try {
+        const data = await tasksAPI.getUsers()
+        dispatch(setUsersData(data.data))
+    } catch (e) {
+        console.log('Ошибка ', e)
+    }
+}
+
+export const updateTask = (
+    id,
+    name,
+    description,
+    comment,
+    price,
+    taskTypeId,
+    statusId,
+    priorityId,
+    serviceId,
+    resolutionDatePlan,
+    tags,
+    initiatorId,
+    executorId,
+    executorGroupId
+) => async (dispatch) => {
+    try {
+        const response = await tasksAPI.updateTask(
+            id,
+            name,
+            description,
+            comment,
+            price,
+            taskTypeId,
+            statusId,
+            priorityId,
+            serviceId,
+            resolutionDatePlan,
+            tags,
+            initiatorId,
+            executorId,
+            executorGroupId
+        )
+        dispatch(loadingTasksPage())
+        console.log(response)
     } catch (e) {
         console.log('Ошибка ', e)
     }

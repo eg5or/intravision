@@ -22,6 +22,40 @@ export const tasksAPI = {
     getTags() {
         return instance.get(`api/${tenantGuid}/Tags`)
     },
+    getUsers() {
+        return instance.get(`api/${tenantGuid}/Users`)
+    },
+    updateTask(id,
+               name,
+               description,
+               comment,
+               price,
+               taskTypeId,
+               statusId,
+               priorityId,
+               serviceId,
+               resolutionDatePlan,
+               tags,
+               initiatorId,
+               executorId,
+               executorGroupId) {
+        return instance.put(`api/${tenantGuid}/Tasks`, {
+            id,
+            name,
+            description,
+            comment,
+            price,
+            taskTypeId,
+            statusId,
+            priorityId,
+            serviceId,
+            resolutionDatePlan,
+            tags,
+            initiatorId,
+            executorId,
+            executorGroupId
+        })
+    },
     getTaskById(id) {
         return instance.get(`api/${tenantGuid}/Tasks/${id}`)
     },
