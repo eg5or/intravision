@@ -12,14 +12,18 @@ import Employees from './components/OtherPages/Employees';
 import Settings from './components/OtherPages/Settings';
 import {compose} from 'redux';
 import {connect} from 'react-redux';
-import {loadingTasksPage, updateTask} from './redux/tasksReducer';
+import {getOneTask, getTasksData, loadingDictionaries, loadingTasksPage, updateTask} from './redux/tasksReducer';
 
 
 function App(props) {
     const [openSidePanel, setOpenSidePanel] = useState(false)
 
     useEffect(() => {
-        props.loadingTasksPage()
+        props.loadingDictionaries()
+    }, [])
+
+    useEffect(() => {
+        props.getTasksData()
     }, [])
     const onOpenSidePanel = () => {
         setOpenSidePanel(true)
@@ -42,7 +46,6 @@ function App(props) {
                         <Route path='/settings' component={Settings}/>
                         <Route path='/requests' component={() => {
                             return <RequestsList onOpenSidePanel={onOpenSidePanel}
-                                                 loadingTasksPage={props.loadingTasksPage}
                                                  tasks={props.tasks}
                                                  priorities={props.priorities}
                             />
@@ -52,8 +55,9 @@ function App(props) {
             </div>
             <div className="side-panel-wrapper" style={{right: openSidePanel ? 0 : '-50%'}}>
                 <SidePanel onCloseSidePanel={onCloseSidePanel}
-                           tasks={props.tasks}
+                           currentTask={props.currentTask}
                            updateTask={props.updateTask}
+                           getOneTasks={props.getOneTask}
                            statuses={props.statuses}
                 />
             </div>
@@ -67,11 +71,14 @@ const mapStateToProps = (state) => ({
     statuses: state.tasks.statuses,
     tags: state.tasks.tags,
     tasks: state.tasks.tasksData,
+    currentTask: state.tasks.currentTask,
 })
 
 export default compose(
     connect(mapStateToProps, {
-        loadingTasksPage,
-        updateTask
+        loadingDictionaries,
+        getTasksData,
+        updateTask,
+        getOneTask
     })
 )(App)

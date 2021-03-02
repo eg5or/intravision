@@ -6,9 +6,10 @@ import EditTask from '../EditTask/EditTask';
 
 const SidePanel = ({
     onCloseSidePanel,
-    tasks,
     updateTask,
-    statuses
+    statuses,
+    getOneTasks,
+    currentTask
 }) => {
 
     return <>
@@ -17,12 +18,12 @@ const SidePanel = ({
 
             />}/>
             <Route path='/requests/:taskId' component={(obj) => {
-                const currentTask = tasks.filter(item => item.id === +obj.match.params.taskId)[0]
                 return <ShowTask
-                          task={currentTask}
                           onCloseSidePanel={onCloseSidePanel}
                           updateTask={updateTask}
                           statuses={statuses}
+                          currentTask={currentTask}
+                          getOneTasks={getOneTasks}
                 />
             }
             }/>
